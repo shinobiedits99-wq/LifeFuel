@@ -156,3 +156,7 @@ body { font-family: 'Inter', sans-serif; background:#0a0a0f; color:#fff; }
   0%, 100% { transform: translateY(0) scale(1.1); }
   50% { transform: translateY(-10px) scale(1.1); }
 }
+canvas {
+  max-height: 300px;
+  margin-top: 10px;
+}
