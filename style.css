@@ -102,3 +102,57 @@ body { font-family: 'Inter', sans-serif; background:#0a0a0f; color:#fff; }
   box-shadow: 0 0 15px #a855f7;
   transform: translateY(-2px);
 }
+.category-selector {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+  perspective: 1000px; /* Enables 3D space */
+}
+
+.cat-card {
+  cursor: pointer;
+  position: relative;
+}
+
+.cat-card input {
+  display: none; /* Hide the actual radio button */
+}
+
+.cat-content {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cat-content span {
+  font-size: 1.5rem;
+  display: block;
+}
+
+.cat-content p {
+  font-size: 0.7rem;
+  margin: 5px 0 0;
+}
+
+/* 3D Animation Effects */
+.cat-card:hover .cat-content {
+  transform: translateY(-5px) rotateX(10deg);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.cat-card input:checked + .cat-content {
+  background: var(--neon-green);
+  color: black;
+  transform: translateZ(20px) scale(1.1);
+  box-shadow: 0 0 20px var(--neon-green);
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1.1); }
+  50% { transform: translateY(-10px) scale(1.1); }
+}
