@@ -565,3 +565,13 @@ async function fetchMeals() {
     
     if (!error) renderMeals(data);
 }
+const { data: { user } } = await supabase.auth.getUser();
+
+const { error } = await supabase
+    .from('meals')
+    .insert([{ 
+        food_name: name, 
+        calories: cals, 
+        category: category,
+        user_id: user.id // Tie the meal to the logged-in user
+    }]);
