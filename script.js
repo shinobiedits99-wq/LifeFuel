@@ -628,3 +628,50 @@ async function updateChart() {
 }
 
 // Call updateChart() inside your fetchMeals() function or Auth change
+async function updateStreaksAndBadges() {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    // Fetch all unique days the user logged a meal
+    const { data, error } = await supabase
+        .from('meals')
+        .select('created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+    if (error || !data.length) return;
+
+    // Logic to calculate streak
+    const loggedDates = [...new Set(data.map(m => new Date(m.created_at).toDateString()))];
+    let streak = 0;
+    let today = new Date().toDateString();
+    let checkDate = new Date();
+
+    // If they haven't logged today, check if they logged yesterday to keep streak alive
+    if (loggedDates[0] !== today) {
+        checkDate.setDate(checkDate.getDate() - 1);
+    }
+
+    for (let i = 0; i < loggedDates.length; i++) {
+        if (loggedDates.includes(checkDate.toDateString())) {
+            streak++;
+            checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+            break;
+        }
+    }
+
+    // Update UI
+    document.getElementById('streak-count').innerText = `${streak} Day Streak`;
+
+    // Badge Logic
+    const badgeIcon = document.getElementById('badge-icon');
+    const badgeName = document.getElementById('badge-name');
+
+    if (streak >= 30) { icon = '👑'; name = 'Legend'; }
+    else if (streak >= 7) { icon = '⚡'; name = 'Pro'; }
+    else if (streak >= 3) { icon = '🌱'; name = 'Committed'; }
+    else { icon = '🥚'; name = 'Rookie'; }
+
+    badgeIcon.innerText = icon;
+    badgeName.innerText = name;
+}
