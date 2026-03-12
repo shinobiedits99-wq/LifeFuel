@@ -492,3 +492,22 @@ function renderMeals(meals) {
     });
     totalCalsDisplay.innerText = total;
 }
+async function fetchMeals() {
+    // 1. Get the start of the current day (midnight)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const startOfDay = today.toISOString();
+
+    // 2. Fetch meals created ONLY today
+    const { data, error } = await supabase
+        .from('meals')
+        .select('*')
+        .gte('created_at', startOfDay) // "Greater than or equal to" start of today
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching:', error);
+    } else {
+        renderMeals(data);
+    }
+}
