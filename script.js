@@ -1,4 +1,9 @@
-// ============================================
+-- Allow anyone to read and insert for now (good for testing)
+alter table meals enable row level security;
+
+create policy "Allow public access" 
+on meals for all 
+using (true);// ============================================
 // LifeFuel AI – Main Application Script
 // Includes: 3D Background, Auth, Meal Tracking,
 //           Chart, AI Insights, Mock Payment
