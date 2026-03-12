@@ -3,78 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeFuel AI | Smart Health</title>
+    <title>LifeFuel AI</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div id="auth-container" class="center-box">
-        <div class="glass-card auth-card">
-            <h1 class="neon-text">LifeFuel AI</h1>
-            <p>Your Intelligent Health Companion</p>
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="password" placeholder="Password">
-            <div class="button-group">
-                <button id="login-btn">Login</button>
-                <button id="signup-btn" class="secondary">Sign Up</button>
-            </div>
-        </div>
+    <div id="auth-container" class="glass-card">
+        <h2>Login to LifeFuel</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button id="login-btn">Login</button>
+        <button id="signup-btn" style="background:transparent; border:1px solid #00ff88;">Sign Up</button>
     </div>
 
     <div id="app-content" style="display: none;">
-        <nav class="navbar">
-            <span class="logo neon-text">LifeFuel AI</span>
-            <button id="logout-btn" class="small-btn">Logout</button>
-        </nav>
-
-        <main class="dashboard-grid">
-            <section class="panel">
-                <div class="streak-row">
-                    <div class="stat-mini">🔥 <span id="streak-count">0</span> Day Streak</div>
-                    <div class="stat-mini"><span id="badge-icon">🥚</span> <span id="badge-name">Rookie</span></div>
-                </div>
-
-                <div class="glass-card">
-                    <h3>Add Fuel</h3>
-                    <input type="text" id="food-name" placeholder="What did you eat?">
-                    <input type="number" id="calories" placeholder="Calories">
-                    
-                    <div class="category-grid">
-                        <label class="cat-btn"><input type="radio" name="category" value="Breakfast" checked><span>🍳</span></label>
-                        <label class="cat-btn"><input type="radio" name="category" value="Lunch"><span>🥪</span></label>
-                        <label class="cat-btn"><input type="radio" name="category" value="Dinner"><span>🥩</span></label>
-                        <label class="cat-btn"><input type="radio" name="category" value="Snack"><span>🥤</span></label>
-                    </div>
-                    
-                    <button id="add-btn">Log Meal</button>
-                </div>
-
-                <div class="glass-card ai-card">
-                    <h3>🤖 AI Assistant</h3>
-                    <p id="ai-suggestion">Add a meal to get insights!</p>
-                    <button id="suggest-btn" class="purple-btn">What's next?</button>
-                </div>
-            </section>
-
-            <section class="panel">
-                <div class="glass-card chart-container">
-                    <h3>Weekly Progress</h3>
-                    <canvas id="weeklyChart"></canvas>
-                </div>
-
-                <div class="glass-card history-card">
-                    <div class="history-header">
-                        <h3>Today's Log</h3>
-                        <label><input type="checkbox" id="show-all"> History</label>
-                    </div>
-                    <div id="meal-list" class="scroll-area"></div>
-                    <div class="total-footer">Total: <span id="total-cals">0</span> / 2000 kcal</div>
-                </div>
-            </section>
-        </main>
+        <nav><button id="logout-btn">Logout</button></nav>
+        <div class="glass-card">
+            <h3>Log a Meal</h3>
+            <input type="text" id="food-name" placeholder="Food Name">
+            <input type="number" id="calories" placeholder="Calories">
+            <button id="add-btn">Save Meal</button>
+        </div>
+        <div id="meal-list" class="glass-card"></div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
