@@ -467,3 +467,28 @@ addBtn.addEventListener('click', async () => {
         fetchMeals();
     }
 });
+const icons = { Breakfast: '🍳', Lunch: '🥪', Dinner: '🥩', Snack: '🥤' };
+
+function renderMeals(meals) {
+    mealList.innerHTML = '';
+    let total = 0;
+
+    meals.forEach(meal => {
+        total += meal.calories;
+        const icon = icons[meal.category] || '🍽️';
+        const div = document.createElement('div');
+        div.className = 'meal-item';
+        div.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.2rem;">${icon}</span>
+                <div>
+                    <strong>${meal.food_name}</strong><br>
+                    <small style="opacity: 0.6;">${meal.category} • ${meal.calories} kcal</small>
+                </div>
+            </div>
+            <button class="delete-btn" onclick="deleteMeal(${meal.id})">✕</button>
+        `;
+        mealList.appendChild(div);
+    });
+    totalCalsDisplay.innerText = total;
+}
