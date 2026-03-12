@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFule AI – Autonomous Health</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#0a0a0f] text-white overflow-x-hidden">
+    <div id="canvas-container" class="fixed inset-0 z-0"></div>
+    
+    <div class="content relative z-10 min-h-screen container mx-auto px-6 py-12 max-w-7xl">
+        <!-- NAV -->
+        <nav class="flex justify-between items-center mb-12">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-cube text-4xl text-violet-400"></i>
+                <span class="text-3xl font-black neon-text">LifeFule AI</span>
+            </div>
+            <div class="flex gap-4">
+                <button id="pro-btn" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl font-bold flex items-center gap-2">Upgrade Pro</button>
+                <button id="auth-btn" class="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-2xl">Sign In</button>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <div class="text-center mb-20">
+            <h1 class="text-6xl font-black leading-none mb-6">Fuel Your Life with<br><span class="neon-text">3D Intelligence</span></h1>
+            <p class="text-xl text-white/70 max-w-2xl mx-auto">Autonomous meal tracking. Real-time AI coach. Beautiful 3D analytics.</p>
+        </div>
+
+        <!-- MAIN GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Account + Add Meal -->
+            <div class="glass-card p-10">
+                <h2 class="text-3xl font-bold mb-8 flex items-center gap-3"><i class="fas fa-user-lock"></i> Account</h2>
+                <!-- Auth forms & logged-in view (same as before) -->
+                <!-- Add Meal form -->
+            </div>
+
+            <!-- Meal History + Chart -->
+            <div class="glass-card p-10">
+                <h2 class="text-3xl font-bold mb-8 flex items-center gap-3"><i class="fas fa-chart-pie"></i> Meal History</h2>
+                <div id="meal-list-container" class="max-h-64 overflow-auto mb-8"></div>
+                <canvas id="calorieChart" class="w-full h-56"></canvas>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="glass-card p-12 mt-12">
+            <h2 class="text-4xl font-black text-center mb-12 neon-text">Why LifeFule AI is Different</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- 4 premium feature cards with hover lift + rotate -->
+            </div>
+        </div>
+
+        <!-- AI Assistant -->
+        <div class="glass-card p-12 mt-12">
+            <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-brain"></i> AI Health Assistant</h2>
+            <div id="ai-insight" class="bg-black/30 rounded-3xl p-8 text-lg min-h-[140px]"></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+            <!-- 4 glowing stat cards -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
