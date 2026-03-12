@@ -1,147 +1,80 @@
-<div id="auth-container" class="glass-card" style="display: none; margin-bottom: 20px;">
-  <h2>Welcome to LifeFuel</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <div style="display: flex; gap: 10px;">
-    <button id="login-btn">Login</button>
-    <button id="signup-btn" style="background: transparent; border: 1px solid var(--neon-green); color: var(--neon-green);">Sign Up</button>
-  </div>
-</div>
-
-<div id="app-content" style="display: none;">
-  <button id="logout-btn" style="width: auto; padding: 5px 15px; font-size: 0.7rem; float: right;">Logout</button>
-</div>!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeFule AI – Autonomous Health</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>LifeFuel AI | Smart Health</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-[#0a0a0f] text-white overflow-x-hidden">
-    <div id="canvas-container" class="fixed inset-0 z-0"></div>
-    
-    <div class="content relative z-10 min-h-screen container mx-auto px-6 py-12 max-w-7xl">
-        <!-- NAV -->
-        <nav class="flex justify-between items-center mb-12">
-            <div class="flex items-center gap-3">
-                <i class="fas fa-cube text-4xl text-violet-400"></i>
-                <span class="text-3xl font-black neon-text">LifeFule AI</span>
+<body>
+    <div id="auth-container" class="center-box">
+        <div class="glass-card auth-card">
+            <h1 class="neon-text">LifeFuel AI</h1>
+            <p>Your Intelligent Health Companion</p>
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <div class="button-group">
+                <button id="login-btn">Login</button>
+                <button id="signup-btn" class="secondary">Sign Up</button>
             </div>
-            <div class="flex gap-4">
-                <button id="pro-btn" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl font-bold flex items-center gap-2">Upgrade Pro</button>
-                <button id="auth-btn" class="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-2xl">Sign In</button>
-            </div>
+        </div>
+    </div>
+
+    <div id="app-content" style="display: none;">
+        <nav class="navbar">
+            <span class="logo neon-text">LifeFuel AI</span>
+            <button id="logout-btn" class="small-btn">Logout</button>
         </nav>
 
-        <!-- HERO -->
-        <div class="text-center mb-20">
-            <h1 class="text-6xl font-black leading-none mb-6">Fuel Your Life with<br><span class="neon-text">3D Intelligence</span></h1>
-            <p class="text-xl text-white/70 max-w-2xl mx-auto">Autonomous meal tracking. Real-time AI coach. Beautiful 3D analytics.</p>
-        </div>
+        <main class="dashboard-grid">
+            <section class="panel">
+                <div class="streak-row">
+                    <div class="stat-mini">🔥 <span id="streak-count">0</span> Day Streak</div>
+                    <div class="stat-mini"><span id="badge-icon">🥚</span> <span id="badge-name">Rookie</span></div>
+                </div>
 
-        <!-- MAIN GRID -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Account + Add Meal -->
-            <div class="glass-card p-10">
-                <h2 class="text-3xl font-bold mb-8 flex items-center gap-3"><i class="fas fa-user-lock"></i> Account</h2>
-                <!-- Auth forms & logged-in view (same as before) -->
-                <!-- Add Meal form -->
-            </div>
+                <div class="glass-card">
+                    <h3>Add Fuel</h3>
+                    <input type="text" id="food-name" placeholder="What did you eat?">
+                    <input type="number" id="calories" placeholder="Calories">
+                    
+                    <div class="category-grid">
+                        <label class="cat-btn"><input type="radio" name="category" value="Breakfast" checked><span>🍳</span></label>
+                        <label class="cat-btn"><input type="radio" name="category" value="Lunch"><span>🥪</span></label>
+                        <label class="cat-btn"><input type="radio" name="category" value="Dinner"><span>🥩</span></label>
+                        <label class="cat-btn"><input type="radio" name="category" value="Snack"><span>🥤</span></label>
+                    </div>
+                    
+                    <button id="add-btn">Log Meal</button>
+                </div>
 
-            <!-- Meal History + Chart -->
-            <div class="glass-card p-10">
-                <h2 class="text-3xl font-bold mb-8 flex items-center gap-3"><i class="fas fa-chart-pie"></i> Meal History</h2>
-                <div id="meal-list-container" class="max-h-64 overflow-auto mb-8"></div>
-                <canvas id="calorieChart" class="w-full h-56"></canvas>
-            </div>
-        </div>
+                <div class="glass-card ai-card">
+                    <h3>🤖 AI Assistant</h3>
+                    <p id="ai-suggestion">Add a meal to get insights!</p>
+                    <button id="suggest-btn" class="purple-btn">What's next?</button>
+                </div>
+            </section>
 
-        <!-- Features Section -->
-        <div class="glass-card p-12 mt-12">
-            <h2 class="text-4xl font-black text-center mb-12 neon-text">Why LifeFule AI is Different</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <!-- 4 premium feature cards with hover lift + rotate -->
-            </div>
-        </div>
+            <section class="panel">
+                <div class="glass-card chart-container">
+                    <h3>Weekly Progress</h3>
+                    <canvas id="weeklyChart"></canvas>
+                </div>
 
-        <!-- AI Assistant -->
-        <div class="glass-card p-12 mt-12">
-            <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-brain"></i> AI Health Assistant</h2>
-            <div id="ai-insight" class="bg-black/30 rounded-3xl p-8 text-lg min-h-[140px]"></div>
-        </div>
-
-        <!-- Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-            <!-- 4 glowing stat cards -->
-        </div>
+                <div class="glass-card history-card">
+                    <div class="history-header">
+                        <h3>Today's Log</h3>
+                        <label><input type="checkbox" id="show-all"> History</label>
+                    </div>
+                    <div id="meal-list" class="scroll-area"></div>
+                    <div class="total-footer">Total: <span id="total-cals">0</span> / 2000 kcal</div>
+                </div>
+            </section>
+        </main>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-<div class="glass-card">
-  <h1>LifeFuel AI</h1>
-  
-  <div id="stats">Daily Goal: <span id="total-cals">0</span> / 2000 kcal</div>
-
-  <input type="text" id="food-name" placeholder="What did you eat?">
-  <input type="number" id="calories" placeholder="Calories">
-  <button id="add-btn">Add to Log</button>
-
-  <div id="meal-list">
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<hr style="margin: 20px 0; border: 0.5px solid rgba(255,255,255,0.1);">
-
-<div class="ai-section">
-  <h3>🤖 AI Nutrition Assistant</h3>
-  <p id="ai-status">Ready to help!</p>
-  <button id="suggest-btn" style="background: #a855f7; color: white;">What should I eat next?</button>
-  <div id="ai-suggestion" style="margin-top: 15px; font-style: italic; color: var(--neon-green);"></div>
-</div>
-<div class="category-selector">
-  <label class="cat-card">
-    <input type="radio" name="category" value="Breakfast" checked>
-    <div class="cat-content"><span>🍳</span><p>Breakfast</p></div>
-  </label>
-  <label class="cat-card">
-    <input type="radio" name="category" value="Lunch">
-    <div class="cat-content"><span>🥪</span><p>Lunch</p></div>
-  </label>
-  <label class="cat-card">
-    <input type="radio" name="category" value="Dinner">
-    <div class="cat-content"><span>🥩</span><p>Dinner</p></div>
-  </label>
-  <label class="cat-card">
-    <input type="radio" name="category" value="Snack">
-    <div class="cat-content"><span>🥤</span><p>Snack</p></div>
-  </label>
-</div>
-<div style="margin-top: 10px; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;">
-  <input type="checkbox" id="show-all" style="width: auto; margin: 0;"> 
-  <label for="show-all">Show all-time history</label>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<div class="glass-card" style="margin-top: 20px;">
-  <h3>📊 Weekly Progress</h3>
-  <canvas id="weeklyChart"></canvas>
-</div>
-<div class="streak-badge-container" style="display: flex; gap: 15px; margin-bottom: 20px;">
-  <div class="glass-card" style="flex: 1; text-align: center; padding: 15px;">
-    <span style="font-size: 2rem;">🔥</span>
-    <h4 id="streak-count">0 Day Streak</h4>
-  </div>
-  <div class="glass-card" style="flex: 1; text-align: center; padding: 15px;">
-    <span id="badge-icon" style="font-size: 2rem;">🥚</span>
-    <h4 id="badge-name">Rookie</h4>
-  </div>
-</div>
