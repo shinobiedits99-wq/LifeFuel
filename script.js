@@ -1,4 +1,40 @@
--- Allow anyone to read and insert for now (good for testing)
+// --- AUTH LOGIC ---
+const authContainer = document.getElementById('auth-container');
+const appContent = document.getElementById('app-content');
+
+// Check for active session
+supabase.auth.onAuthStateChange((event, session) => {
+  if (session) {
+    authContainer.style.display = 'none';
+    appContent.style.display = 'block';
+    fetchMeals(); // Only fetch data when we know who the user is
+  } else {
+    authContainer.style.display = 'block';
+    appContent.style.display = 'none';
+  }
+});
+
+// Sign Up
+document.getElementById('signup-btn').addEventListener('click', async () => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const { error } = await supabase.auth.signUp({ email, password });
+  if (error) alert(error.message);
+  else alert("Check your email for the confirmation link!");
+});
+
+// Login
+document.getElementById('login-btn').addEventListener('click', async () => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) alert(error.message);
+});
+
+// Logout
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  await supabase.auth.signOut();
+});-- Allow anyone to read and insert for now (good for testing)
 alter table meals enable row level security;
 
 create policy "Allow public access" 
