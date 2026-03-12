@@ -575,3 +575,56 @@ const { error } = await supabase
         category: category,
         user_id: user.id // Tie the meal to the logged-in user
     }]);
+let myChart; // Variable to hold the chart instance
+
+async function updateChart() {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    // Get date 7 days ago
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const { data, error } = await supabase
+        .from('meals')
+        .select('calories, created_at')
+        .eq('user_id', user.id)
+        .gte('created_at', sevenDaysAgo.toISOString());
+
+    if (error) return console.error(error);
+
+    // Group calories by date
+    const dailyTotals = {};
+    data.forEach(meal => {
+        const date = new Date(meal.created_at).toLocaleDateString();
+        dailyTotals[date] = (dailyTotals[date] || 0) + meal.calories;
+    });
+
+    const labels = Object.keys(dailyTotals);
+    const values = Object.values(dailyTotals);
+
+    const ctx = document.getElementById('weeklyChart').getContext('2d');
+    
+    if (myChart) myChart.destroy(); // Clear old chart before redrawing
+
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Calories per Day',
+                data: values,
+                backgroundColor: '#00ff88', // Your neon green
+                borderRadius: 5
+            }]
+        },
+        options: {
+            plugins: { legend: { labels: { color: 'white' } } },
+            scales: {
+                y: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                x: { ticks: { color: 'white' }, grid: { display: false } }
+            }
+        }
+    });
+}
+
+// Call updateChart() inside your fetchMeals() function or Auth change
