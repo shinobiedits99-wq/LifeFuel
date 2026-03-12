@@ -39,13 +39,3 @@ Add your Supabase URL and ANON_KEY to script.js.
 
 Open index.html and start fueling!
 
-Why this is important:
-By adding this, your GitHub goes from looking like a "folder of files" to a Portfolio Project. It shows you understand:
-
-Project structure.
-
-Documentation.
-
-User experience.
-
-What's our next move? Since your README is ready, would you like me to help you test the login system one last time to make sure the email confirmation is working, or are you ready to share your Vercel link with the world?
