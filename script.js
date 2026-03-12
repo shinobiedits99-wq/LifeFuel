@@ -1,110 +1,37 @@
 const SUPABASE_URL = 'https://ypqieapdpixwshhllcut.supabase.co';
-const SUPABASE_KEY = 'YOUR_REAL_ANON_KEY_HERE';
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwcWllYXBkcGl4d3NoaGxsY3V0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMDQ4NDcsImV4cCI6MjA4ODc4MDg0N30.DLZ5ArWsh-Jdwr-VzJ-n4sHqM0zEIl2EGZ6Uoabl2fw';
 
-// Auth Logic
-supabaseClient.auth.onAuthStateChange((event, session) => {
-    const authBox = document.getElementById('auth-container');
-    const appBox = document.getElementById('app-content');
-    
-    if (session) {
-        authBox.style.display = 'none';
-        appBox.style.display = 'block';
-        refreshData();
-    } else {
-        authBox.style.display = 'flex';
-        appBox.style.display = 'none';
-    }
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Handle UI visibility
+supabase.auth.onAuthStateChange((event, session) => {
+    document.getElementById('auth-container').style.display = session ? 'none' : 'block';
+    document.getElementById('app-content').style.display = session ? 'block' : 'none';
+    if (session) fetchMeals();
 });
 
-// Sign Up / Login
-document.getElementById('signup-btn').onclick = async () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const { error } = await supabaseClient.auth.signUp({ email, password });
-    if (error) alert(error.message); else alert("Check your email!");
-};
-
 document.getElementById('login-btn').onclick = async () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value
+    });
     if (error) alert(error.message);
 };
 
-document.getElementById('logout-btn').onclick = () => supabaseClient.auth.signOut();
-
-// Meal Logic
-async function refreshData() {
-    await fetchMeals();
-    await updateChart();
-    await updateStreaks();
-}
-
 document.getElementById('add-btn').onclick = async () => {
     const name = document.getElementById('food-name').value;
-    const cals = parseInt(document.getElementById('calories').value);
-    const cat = document.querySelector('input[name="category"]:checked').value;
+    const cals = document.getElementById('calories').value;
+    const { data: { user } } = await supabase.auth.getUser();
     
-    const { data: { user } } = await supabaseClient.auth.getUser();
-
-    const { error } = await supabaseClient.from('meals').insert([{ 
-        food_name: name, calories: cals, category: cat, user_id: user.id 
+    const { error } = await supabase.from('meals').insert([{ 
+        food_name: name, calories: cals, user_id: user.id 
     }]);
-
-    if (!error) {
-        document.getElementById('food-name').value = '';
-        document.getElementById('calories').value = '';
-        refreshData();
-    }
+    if (error) alert(error.message); else { alert("Added!"); fetchMeals(); }
 };
 
 async function fetchMeals() {
-    const showAll = document.getElementById('show-all').checked;
-    let query = supabaseClient.from('meals').select('*');
-
-    if (!showAll) {
-        const today = new Date();
-        today.setHours(0,0,0,0);
-        query = query.gte('created_at', today.toISOString());
-    }
-
-    const { data, error } = await query.order('created_at', { ascending: false });
-    if (!error) renderList(data);
+    const { data } = await supabase.from('meals').select('*');
+    document.getElementById('meal-list').innerHTML = data.map(m => `<div>${m.food_name}</div>`).join('');
 }
 
-function renderList(meals) {
-    const list = document.getElementById('meal-list');
-    const icons = { Breakfast: '🍳', Lunch: '🥪', Dinner: '🥩', Snack: '🥤' };
-    let total = 0;
-    list.innerHTML = '';
-
-    meals.forEach(m => {
-        total += m.calories;
-        list.innerHTML += `
-            <div class="meal-item">
-                <span>${icons[m.category] || '🍽️'} <strong>${m.food_name}</strong></span>
-                <span>${m.calories} kcal <button class="del" onclick="deleteMeal(${m.id})">✕</button></span>
-            </div>`;
-    });
-    document.getElementById('total-cals').innerText = total;
-}
-
-window.deleteMeal = async (id) => {
-    await supabaseClient.from('meals').delete().eq('id', id);
-    refreshData();
-};
-
-document.getElementById('show-all').onchange = fetchMeals;
-
-// Initial Chart Placeholder
-let myChart;
-async function updateChart() {
-    const ctx = document.getElementById('weeklyChart').getContext('2d');
-    if (myChart) myChart.destroy();
-    myChart = new Chart(ctx, {
-        type: 'bar',
-        data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], datasets: [{ label: 'Kcal', data: [1200, 1900, 1500, 2100, 1800, 0, 0], backgroundColor: '#00ff88' }] },
-        options: { color: 'white' }
-    });
-}
+document.getElementById('logout-btn').onclick = () => supabase.auth.signOut();
