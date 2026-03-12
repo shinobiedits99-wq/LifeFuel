@@ -511,3 +511,21 @@ async function fetchMeals() {
         renderMeals(data);
     }
 }
+const historyToggle = document.getElementById('show-all');
+
+historyToggle.addEventListener('change', fetchMeals);
+
+async function fetchMeals() {
+    let query = supabase.from('meals').select('*');
+
+    // Only filter if "Show all-time" is UNCHECKED
+    if (!historyToggle.checked) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        query = query.gte('created_at', today.toISOString());
+    }
+
+    const { data, error } = await query.order('created_at', { ascending: false });
+    
+    if (!error) renderMeals(data);
+}
