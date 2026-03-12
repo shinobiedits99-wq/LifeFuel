@@ -447,3 +447,23 @@ suggestBtn.addEventListener('click', () => {
         aiSuggestion.innerText = suggestion;
     }, 800);
 });
+addBtn.addEventListener('click', async () => {
+    const name = foodInput.value;
+    const cals = parseInt(calInput.value);
+    // Get selected category
+    const category = document.querySelector('input[name="category"]:checked').value;
+
+    if (!name || !cals) return alert("Please fill in both fields!");
+
+    const { error } = await supabase
+        .from('meals')
+        .insert([{ food_name: name, calories: cals, category: category }]);
+
+    if (error) {
+        alert("Error saving meal!");
+    } else {
+        foodInput.value = '';
+        calInput.value = '';
+        fetchMeals();
+    }
+});
