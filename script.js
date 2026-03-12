@@ -417,3 +417,33 @@ using (true);// ============================================
 
 })();
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+const suggestBtn = document.getElementById('suggest-btn');
+const aiSuggestion = document.getElementById('ai-suggestion');
+const aiStatus = document.getElementById('ai-status');
+
+suggestBtn.addEventListener('click', () => {
+    const currentCals = parseInt(totalCalsDisplay.innerText);
+    const goal = 2000;
+    const remaining = goal - currentCals;
+
+    aiStatus.innerText = "AI is thinking...";
+    aiSuggestion.innerText = "";
+
+    // Simulate "AI thinking" delay
+    setTimeout(() => {
+        let suggestion = "";
+
+        if (remaining <= 0) {
+            suggestion = "You've hit your goal! Stick to water or herbal tea for the rest of the day. 💧";
+        } else if (remaining < 300) {
+            suggestion = "You're almost there! Try a light snack like a handful of almonds or a Greek yogurt. 🥄";
+        } else if (remaining < 700) {
+            suggestion = "You have room for a solid meal. How about Grilled Salmon with quinoa and steamed broccoli? 🐟";
+        } else {
+            suggestion = "You need fuel! A hearty bowl of Oatmeal with bananas and peanut butter would be a great start. 🥣";
+        }
+
+        aiStatus.innerText = "AI Recommendation:";
+        aiSuggestion.innerText = suggestion;
+    }, 800);
+});
